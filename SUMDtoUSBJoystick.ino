@@ -3,12 +3,12 @@
 
 #include <Joystick.h>
 
-#define DEBUGOUT
+//#define DEBUGOUT
 
 
 // Create the Joystick
-Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,
-                   JOYSTICK_TYPE_MULTI_AXIS, 2, 0,
+Joystick_ Joystick(1,
+                   JOYSTICK_TYPE_JOYSTICK, 2, 0,
                    true, true, false, false, false, false,
                    true, true, false, false, false);
 
@@ -19,7 +19,7 @@ unsigned int channels[5];
 
 void setup()
 {
-
+Serial.begin(115200);
 #ifdef DEBUGOUT
   Serial.begin(115200);
   Serial.println("Starte");
