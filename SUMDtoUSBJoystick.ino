@@ -1,5 +1,8 @@
 // Decode SUMD Signal connected to Serial1 and output USB Joystick Signals
 
+// ToDo:
+// - Do not assume fixed number of channels (5)
+// - More sophisticated check of Data integrity (CRC,...)
 
 #include <Joystick.h>
 
@@ -19,7 +22,7 @@ unsigned int channels[5];
 
 void setup()
 {
-Serial.begin(115200);
+  Serial.begin(115200);
 #ifdef DEBUGOUT
   Serial.begin(115200);
   Serial.println("Starte");
@@ -37,9 +40,12 @@ Serial.begin(115200);
   Joystick.setRudderRange(8800, 15200);
   Joystick.setThrottleRange(8800, 15200);
 
-  // empty Buffer
-  while (Serial1.available())
+  // Next packet started?
+  while (Serial1.peek() != 168)
+  {
+    // Consume one Byte
     Serial1.read();
+  }
 
 }
 
@@ -50,8 +56,8 @@ void loop()
     for (int i = 0; i < 15; i++)
     {
       cbuffer[i] = Serial1.read();
-      //Serial.print(cbuffer[i], DEC);
-      //Serial.print(",");
+      //      Serial.print(cbuffer[i], DEC);
+      //      Serial.print(",");
     }
     //Serial.println("<<<");
     // Lets have a look in the buffer
@@ -95,9 +101,12 @@ void loop()
     {
       Serial.println("RX Error!");
 
-      // empty Buffer to restart with next packet
-      while (Serial1.available())
+      // Next packet started?
+      while (Serial1.peek() != 168)
+      {
+        // Consume one Byte
         Serial1.read();
+      }
     }
   }
 }
