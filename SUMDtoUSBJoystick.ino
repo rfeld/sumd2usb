@@ -24,7 +24,6 @@ void setup()
 {
   Serial.begin(115200);
 #ifdef DEBUGOUT
-  Serial.begin(115200);
   Serial.println("Starte");
 #endif
 
